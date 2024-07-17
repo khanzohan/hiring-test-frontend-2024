@@ -1,0 +1,28 @@
+<div class="bg-white p-6 rounded-lg">
+  <h2 class="text-2xl font-bold mb-4">Basic Info</h2>
+  <form>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="username" >
+        Username
+      </label>
+      <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username">
+    </div>
+  
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="address">
+        Addreses
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="address" type="text" placeholder="Address">
+    </div>
+  
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="income">
+        Income
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="income" type="number" placeholder="Income">
+    </div>
+    <div class="flex mt-4 justify-end">
+      <button type="button" class="bg-teal-500 text-white px-6 py-2 rounded-lg" hx-get="/step2" hx-target="#step-content" id="step-next-1">Next</button>
+    </div>
+  </form>
+</div>

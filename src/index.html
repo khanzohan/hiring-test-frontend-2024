@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Brand Flow</title>
+  <link href="./styles/output.css" rel="stylesheet">
+  <link href="./styles/main.css" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body class="bg-gray-50 flex justify-center items-center min-h-screen">
+  <div class="container flex justify-center items-center min-h-screen">
+    <div class="flex lg:w-2/3 w-11/12">
+      <ol class="step overflow-hidden space-y-8 mt-6 p-6 flex-1 w-full bg-gray-100 shadow-md">
+        <li id="stepper1" class="relative flex-1 after:content-[''] after:w-0.5 after:h-full after:bg-gray-200 after:inline-block after:absolute after:-bottom-12 after:left-4 lg:after:left-5">
+          <div class="flex items-center font-medium w-full">
+            <span class="stepper-indicate w-8 h-8 bg-indigo-50 border-2 border-indigo-600 rounded-full flex justify-center items-center mr-3 text-sm text-indigo-600 lg:w-10 lg:h-10">1</span>
+            <div class="block stepper-text">
+              <h4 class="text-lg text-indigo-600">Basic Info</h4>
+            </div>
+          </div>
+        </li>
+        <li id="stepper2" class="relative flex-1 after:content-[''] after:w-0.5 after:h-full after:bg-gray-200 after:inline-block after:absolute after:-bottom-12 after:left-4 lg:after:left-5">
+          <div class="flex items-center font-medium w-full">
+            <span class="stepper-indicate w-8 h-8 bg-gray-50 border-2 border-gray-200 rounded-full flex justify-center items-center mr-3 text-sm lg:w-10 lg:h-10">2</span>
+            <div class="block stepper-text">
+              <h4 class="text-lg text-gray-600">Visual Identity</h4>
+            </div>
+          </div>
+        </li>
+        <li id="stepper3" class="relative flex-1">
+          <div class="flex items-center font-medium w-full">
+            <span class="stepper-indicate w-8 h-8 bg-gray-50 border-2 border-gray-200 rounded-full flex justify-center items-center mr-3 text-sm lg:w-10 lg:h-10">3</span>
+            <div class="block stepper-text">
+              <h4 class="text-lg text-gray-900">Employees</h4>
+            </div>
+          </div>
+        </li>
+      </ol>
+      <div class="mt-6 flex-[2] shadow-md" id="step-content">
+        <!-- Step content will be loaded here -->
+        <div id="step1-content" class="fade fade-in" hx-get="/step1" hx-trigger="load"></div>
+        <div id="step2-content" class="fade hidden" hx-get="/step2" hx-trigger="load"></div>
+        <div id="step3-content" class="fade hidden" hx-get="/step3" hx-trigger="load"></div>
+      </div>
+    </div>
+  </div>
+  <div hx-get="components/success-dialog.html" hx-trigger="load" class="hidden" id="success-dialog"></div>
+
+  <script>
+    const doneIcon = `
+      <svg class="w-5 h-5 stroke-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 12L9.28722 16.2923C9.62045 16.6259 9.78706 16.7927 9.99421 16.7928C10.2014 16.7929 10.3681 16.6262 10.7016 16.2929L20 7" stroke="stroke-current" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="my-path">
+        </path>
+      </svg>`;
+
+    const normalClass = "stepper-indicate w-8 h-8 bg-gray-50 border-2 border-gray-200 rounded-full flex justify-center items-center mr-3 text-sm lg:w-10 lg:h-10";
+    const doneClass = "stepper-indicate w-8 h-8 bg-indigo-600 border-2 border-transparent rounded-full flex justify-center items-center mr-3 text-sm text-white lg:w-10 lg:h-10";
+    const progressClass = "stepper-indicate w-8 h-8 bg-indigo-50 border-2 border-indigo-600 rounded-full flex justify-center items-center mr-3 text-sm text-indigo-600 lg:w-10 lg:h-10";
+
+    const spreateDoneClass = "after:content-[''] after:w-0.5 after:h-full after:bg-indigo-600 after:inline-block after:absolute after:-bottom-11 after:left-4 lg:after:left-5";
+    const spreateNormalClass = "after:content-[''] after:w-0.5 after:h-full after:bg-gray-200 after:inline-block after:absolute after:-bottom-12 after:left-4 lg:after:left-5";
+
+    const setStepperClasses = (stepper, stepperClass, separatorClass, titleClass, indicator, isLastStep = false) => {
+      $(stepper).find('.stepper-indicate').each(function() {
+        $(this).attr('class', stepperClass);
+      });
+
+      $(stepper).attr('class', "relative flex-1 " + (isLastStep ? "" : separatorClass));
+      $(stepper).find('h4').attr('class', "text-lg " + titleClass);
+
+      $(stepper).find('.stepper-indicate').html(indicator < 0 ? doneIcon : indicator);
+    };
+
+    const switchContent = (fromStep, toStep) => {
+      fromStep.removeClass('fade-in').addClass('fade').one('transitionend', () => {
+        fromStep.addClass('hidden');
+        toStep.removeClass('hidden').removeClass('fade').addClass('fade-in');
+      });
+    };
+
+    const handleStepNext1Click = () => {
+      setStepperClasses($('#stepper1'), doneClass, spreateDoneClass, 'text-gray-900', -1);
+      setStepperClasses($('#stepper2'), progressClass, spreateNormalClass, 'text-indigo-600', 2);
+      switchContent($('#step1-content'), $('#step2-content'));
+    };
+
+    const handleStepNext2Click = () => {
+      setStepperClasses($('#stepper2'), doneClass, spreateDoneClass, 'text-gray-900', -1, false);
+      setStepperClasses($('#stepper3'), progressClass, spreateNormalClass, 'text-indigo-600', 3, true);
+      switchContent($('#step2-content'), $('#step3-content'));
+    };
+
+    const handleStepBack1Click = () => {
+      setStepperClasses($('#stepper1'), progressClass, spreateNormalClass, 'text-indigo-600', 1);
+      setStepperClasses($('#stepper2'), normalClass, spreateNormalClass, 'text-gray-900', 2);
+      switchContent($('#step2-content'), $('#step1-content'));
+      htmx.trigger(document.querySelector('#step1-content'), 'load');
+    };
+
+    const handleStepBack2Click = () => {
+      setStepperClasses($('#stepper2'), progressClass, spreateNormalClass, 'text-indigo-600', 2);
+      setStepperClasses($('#stepper3'), normalClass, spreateNormalClass, 'text-gray-900', 3, true);
+      switchContent($('#step3-content'), $('#step2-content'));
+    };
+
+    const handleLastStepClick = () => {
+      $('#success-dialog').removeClass('hidden').addClass('block');
+    };
+
+    const handleDoneStepClick = () => {
+      location.reload();
+    };
+
+    $(document).on('htmx:afterSwap', function(event) {
+      if (event.target.id === 'step-content' || event.target.id.startsWith('step')) {
+        $('#step-next-1').off('click').on('click', handleStepNext1Click);
+        $('#step-next-2').off('click').on('click', handleStepNext2Click);
+        $('#step-back-1').off('click').on('click', handleStepBack1Click);
+        $('#step-back-2').off('click').on('click', handleStepBack2Click);
+        $('#step-last').off('click').on('click', handleLastStepClick);
+        $('#done-btn').off('click').on('click', handleDoneStepClick);
+        }
+    });
+  </script>
+</body>
+</html>

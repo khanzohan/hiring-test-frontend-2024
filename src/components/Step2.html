@@ -1,0 +1,36 @@
+<div class="bg-white p-6 rounded-lg">
+  <h2 class="text-2xl font-bold mb-4">Visual Identity</h2>
+  <form>
+    <div class="mb-4">
+      <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+            </svg>
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload logo</span></p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+        </div>
+        <input id="dropzone-file" type="file" class="hidden" />
+      </label>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="brandcolor">
+        Brand Color
+      </label>
+      <input class="shadow rounded w-full h-8 px-2 focus:outline-none focus:shadow-outline" id="brandcolor" type="color" onchange="updateBackgroundColor(this.value);">
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="font">
+        Font
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="font" type="number" placeholder="Select Font Size">
+    </div>
+
+    <div class="mt-4 flex justify-end">
+      <button type="button" class="bg-gray-500 text-white px-6 py-2 mr-5 rounded-lg" hx-get="/step1" hx-target="#step-content" id="step-back-1">Back</button>
+      <button type="button" class="bg-teal-500 text-white px-6 py-2 rounded-lg" hx-get="/step3" hx-target="#step-content" id="step-next-2">Next</button>
+    </div>
+  </form>
+</div>
